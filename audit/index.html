@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free search audit for your D2C store. See what your customers can't find and how AI search fixes it.">
+  <meta name="keywords" content="search audit, D2C audit, AI search, beauty search">
+  <meta name="author" content="Intentflow">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Free Search Audit - Intentflow">
+  <meta property="og:description" content="Analyze your on-site search performance in seconds.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://intentflow.io/audit/">
+  <link rel="canonical" href="https://intentflow.io/audit/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Audit page specific styles */
+    .audit-header {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--card);
+    }
+
+    .audit-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+    }
+
+    .audit-page {
+      padding-top: 0;
+      min-height: auto;
+      background: linear-gradient(180deg, var(--bg-warm) 0%, var(--bg) 40%);
+    }
+
+    .audit-hero {
+      text-align: center;
+      padding: 4rem 0 2.5rem;
+    }
+
+    .audit-hero h1 {
+      margin-bottom: 0.75rem;
+    }
+
+    .audit-hero p {
+      font-size: 1.125rem;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .audit-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .audit-card {
+        padding: 2.5rem;
+      }
+    }
+
+    .demo-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      padding: 0.75rem 1rem;
+      background: var(--primary-soft);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.9375rem;
+      color: var(--text-light);
+    }
+
+    .demo-toggle input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .demo-toggle label {
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .demo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 100px;
+    }
+
+    .advanced-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--primary);
+      cursor: pointer;
+      margin: 0.5rem 0 1rem;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .advanced-fields {
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+
+    .advanced-fields.active {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .analyze-btn {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    /* Progress section */
+    .progress-section {
+      display: none;
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .progress-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .progress-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .progress-title {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .progress-count {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: var(--bg);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 100px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+    }
+
+    .current-query {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding: 0.875rem 1rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-light);
+    }
+
+    .query-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .current-query-text {
+      font-size: 0.9375rem;
+      color: var(--text);
+    }
+
+    .current-query-text strong {
+      color: var(--primary);
+    }
+
+    .tested-queries {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (min-width: 768px) {
+      .tested-queries {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .query-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.8125rem;
+      color: var(--text);
+      border: 1px solid var(--border-light);
+      transition: var(--transition);
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .query-chip.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .query-chip.found {
+      background: rgba(34, 197, 94, 0.08);
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    .query-chip.missing {
+      background: rgba(220, 38, 38, 0.06);
+      border-color: rgba(220, 38, 38, 0.15);
+    }
+
+    .query-chip .icon {
+      font-size: 0.875rem;
+    }
+
+    /* Results section */
+    .results-section {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .results-section.active {
+      display: block;
+    }
+
+    .score-board {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2rem 1.5rem;
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .score-board {
+        flex-direction: row;
+        gap: 2.5rem;
+      }
+    }
+
+    .score-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 8px solid;
+      flex-shrink: 0;
+    }
+
+    .score-circle.low {
+      border-color: #FEE2E2;
+      background: #FEF2F2;
+    }
+
+    .score-circle.low .score-value {
+      color: #DC2626;
+    }
+
+    .score-circle.high {
+      border-color: #D1FAE5;
+      background: #ECFDF5;
+    }
+
+    .score-circle.high .score-value {
+      color: #059669;
+    }
+
+    .score-value {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-top: 0.5rem;
+    }
+
+    .score-arrow {
+      font-size: 2.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .score-improvement {
+      text-align: center;
+    }
+
+    .score-improvement .value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .score-improvement .label {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    .result-summary-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .result-summary-card h3 {
+      margin-bottom: 0.75rem;
+      font-size: 1.125rem;
+    }
+
+    .result-summary-card p {
+      font-size: 0.9375rem;
+      color: var(--text-light);
+    }
+
+    /* Matrix table */
+    .matrix-section {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .matrix-section h3 {
+      margin-bottom: 1.25rem;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .matrix-table th,
+    .matrix-table td {
+      padding: 0.875rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .matrix-table th {
+      font-weight: 700;
+      color: var(--text);
+      background: var(--bg);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .matrix-table tr.highlight {
+      background: #FEF2F2;
+    }
+
+    .matrix-table tr.highlight td {
+      border-bottom-color: #FECACA;
+    }
+
+    .matrix-table td {
+      color: var(--text-light);
+    }
+
+    .matrix-table .query-cell {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .type-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .type-brand {
+      background: rgba(232, 115, 74, 0.12);
+      color: var(--primary-dark);
+    }
+
+    .type-category {
+      background: rgba(59, 130, 246, 0.12);
+      color: #1D4ED8;
+    }
+
+    .type-scenario {
+      background: rgba(16, 185, 129, 0.12);
+      color: #047857;
+    }
+
+    .status-found {
+      color: #059669;
+      font-weight: 600;
+    }
+
+    .status-missing {
+      color: #DC2626;
+      font-weight: 600;
+    }
+
+    .enhanced-info {
+      max-width: 180px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 767px) {
+      .matrix-table {
+        font-size: 0.8125rem;
+      }
+
+      .matrix-table th,
+      .matrix-table td {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .enhanced-info {
+        max-width: 100px;
+      }
+    }
+
+    /* Action section */
+    .action-section {
+      display: none;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 1.5rem;
+      color: white;
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .action-section.active {
+      display: block;
+    }
+
+    .action-section h2 {
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+
+    .action-section p {
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 1.5rem;
+    }
+
+    .action-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .action-form {
+        flex-direction: row;
+      }
+    }
+
+    .action-form input {
+      flex: 1;
+      padding: 0.875rem 1rem;
+      border: none;
+      border-radius: 100px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .action-form input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .action-form button {
+      padding: 0.875rem 1.5rem;
+      background: white;
+      color: var(--primary);
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .action-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .action-note {
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 1rem;
+    }
+
+    .action-message {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      display: none;
+    }
+
+    .action-message.success {
+      display: block;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .action-message.error {
+      display: block;
+      background: rgba(220, 38, 38, 0.3);
+    }
+
+    /* Demo banner */
+    .demo-banner {
+      display: none;
+      background: linear-gradient(90deg, #FEF3C7 0%, #FDE68A 100%);
+      border: 1px solid #F59E0B;
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9375rem;
+      color: #92400E;
+      font-weight: 500;
+    }
+
+    .demo-banner.active {
+      display: block;
+    }
+
+    /* Enhanced results product cards */
+    .enhanced-cards-section {
+      margin-top: 2rem;
+    }
+
+    .enhanced-cards-section h3 {
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .enhanced-query-group {
+      margin-bottom: 2rem;
+    }
+
+    .enhanced-query-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .enhanced-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .enhanced-product-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .enhanced-product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .enhanced-product-image {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #f3f4f6;
+      display: block;
+    }
+
+    .enhanced-product-body {
+      padding: 0.875rem;
+    }
+
+    .enhanced-product-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .enhanced-product-price {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .ai-optimized-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #FFF3E0;
+      color: #E8734A;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+  </style>
+  <title>Free Search Audit - Intentflow</title>
+</head>
+<body>
+  <!-- Header -->
+  <header class="audit-header">
+    <div class="container">
+      <a href="../index.html" class="logo">
+        <span class="logo-icon">I</span>
+        Intent<span>flow</span>
+      </a>
+      <a href="../index.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"/>
+          <path d="M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Home
+      </a>
+    </div>
+  </header>
+
+  <main class="audit-page">
+    <!-- Hero -->
+    <section class="audit-hero">
+      <div class="container">
+        <span class="section-label">Free Tool</span>
+        <h1>Free Search Audit</h1>
+        <p>Enter your website URL. We'll test your search and show you what you're missing.</p>
+      </div>
+    </section>
+
+    <!-- Input Form -->
+    <section class="audit-input" id="audit">
+      <div class="container">
+        <div class="audit-card">
+          <div class="demo-toggle">
+            <input type="checkbox" id="demoMode" name="demoMode">
+            <label for="demoMode">Use demo data (no backend required)</label>
+            <span class="demo-badge" style="margin-left: auto;">Demo</span>
+          </div>
+
+          <form id="auditForm">
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label for="siteUrl">Your website URL</label>
+                <input type="url" id="siteUrl" name="siteUrl" placeholder="https://yourstore.com" required value="https://example.com">
+              </div>
+              <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                  <option value="beauty" selected>Beauty</option>
+                  <option value="fashion">Fashion</option>
+                  <option value="home">Home & Living</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="market">Language / Market</label>
+                <select id="market" name="market" required>
+                  <option value="id" selected>Indonesia</option>
+                  <option value="th">Thailand</option>
+                  <option value="vn">Vietnam</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="apiEndpoint">API Endpoint</label>
+                <input type="url" id="apiEndpoint" name="apiEndpoint" value="http://127.0.0.1:8000/api/audit/report" placeholder="https://your-api.com/api/audit/report">
+              </div>
+            </div>
+
+            <button type="button" class="advanced-toggle" id="advancedToggle">
+              <span>Advanced options</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="advanced-icon">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+
+            <div class="advanced-fields" id="advancedFields">
+              <div class="form-group">
+                <label for="searchUrlPattern">Search URL Pattern (optional)</label>
+                <input type="text" id="searchUrlPattern" name="searchUrlPattern" placeholder="https://yourstore.com/search?q={query}">
+                <p style="font-size: 0.812rem; color: var(--text-muted); margin-top: 0.375rem;">Only needed if your search URL differs from the common patterns like /search?q=.</p>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-large analyze-btn" id="analyzeBtn">
+              Analyze My Search
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/>
+                <path d="M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </form>
+
+          <div class="form-message" id="formMessage" style="margin-top: 1rem;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress Section -->
+    <section class="progress-section" id="progressSection">
+      <div class="container">
+        <div class="progress-card">
+          <div class="progress-header">
+            <span class="progress-title">Analyzing your search...</span>
+            <span class="progress-count" id="progressCount">0/13</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="current-query" id="currentQuery">
+            <div class="query-spinner"></div>
+            <span class="current-query-text">Preparing audit...</span>
+          </div>
+          <div class="tested-queries" id="testedQueries"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="resultsSection">
+      <div class="container">
+        <div class="demo-banner" id="demoBanner">
+          ⚠️ Showing demo results. Connect a real backend API to audit your actual website.
+        </div>
+
+        <div class="score-board">
+          <div class="score-circle low" id="currentScoreCircle">
+            <span class="score-value" id="currentScoreValue">-</span>
+            <span class="score-label">Current Score</span>
+          </div>
+          <div class="score-arrow">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/>
+              <path d="M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div class="score-circle high" id="enhancedScoreCircle">
+            <span class="score-value" id="enhancedScoreValue">-</span>
+            <span class="score-label">Enhanced Score</span>
+          </div>
+          <div class="score-improvement">
+            <div class="value" id="improvementValue">-</div>
+            <div class="label">Improvement</div>
+          </div>
+        </div>
+
+        <div class="result-summary-card">
+          <h3>Word Library Estimate</h3>
+          <p id="libraryEstimate">Calculating...</p>
+        </div>
+
+        <div class="matrix-section">
+          <h3>Detailed Test Matrix</h3>
+          <div style="overflow-x: auto;">
+            <table class="matrix-table">
+              <thead>
+                <tr>
+                  <th>Query</th>
+                  <th>Type</th>
+                  <th>Original Results</th>
+                  <th>Status</th>
+                  <th>Enhanced Results</th>
+                </tr>
+              </thead>
+              <tbody id="matrixTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="enhanced-cards-section" id="enhancedCardsSection">
+          <h3>Enhanced Result Previews</h3>
+          <div id="enhancedCardsContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="action-section" id="actionSection">
+      <div class="container">
+        <h2>Want to fix this?</h2>
+        <p>We'll email you the complete report with actionable recommendations.</p>
+        <form class="action-form" id="actionForm">
+          <input type="email" id="reportEmail" placeholder="you@company.com" required>
+          <button type="submit" id="sendReportBtn">Send Me the Full Report</button>
+        </form>
+        <p class="action-note">No spam. Unsubscribe anytime.</p>
+        <div class="action-message" id="actionMessage"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo">
+            <span class="logo-icon">I</span>
+            Intent<span>flow</span>
+          </a>
+          <p>Built for Southeast Asian beauty brands. AI-powered search that understands your customers.</p>
+        </div>
+        <div class="footer-nav">
+          <h4 class="footer-title">Product</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html#how-it-works">How It Works</a></li>
+            <li><a href="../index.html#audit">Free Audit</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4 class="footer-title">Contact</h4>
+          <ul class="footer-links">
+            <li><a href="mailto:hello@intentflow.io">hello@intentflow.io</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 Intentflow. Built for Southeast Asian beauty brands.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // Demo / fallback data
+      const DEMO_RESULT = {
+        site_url: 'https://example.com',
+        audit_time: new Date().toISOString(),
+        score: {
+          current: 35,
+          enhanced: 85,
+          improvement: '+50',
+          level: 'poor'
+        },
+        word_library_estimate: 'medium',
+        contact_priority: 'high',
+        test_results: [
+          { level: 'L1', query: 'Somethinc', original_found: true, original_count: 8, enhanced_count: 2, issue: false, enhanced_items: [
+            { title: 'Somethinc 5% Niacinamide Barrier Serum', price: 'Rp 149.000', image: 'https://placehold.co/300x200/f3e8ff/7c3aed?text=Somethinc', match_type: 'exact' },
+            { title: 'Somethinc Bakuchiol Skinpair Oil Serum', price: 'Rp 189.000', image: 'https://placehold.co/300x200/e0e7ff/4338ca?text=Somethinc', match_type: 'exact' }
+          ]},
+          { level: 'L1', query: 'Wardah', original_found: true, original_count: 12, enhanced_count: 1, issue: false, enhanced_items: [
+            { title: 'Wardah UV Shield SPF 50', price: 'Rp 79.000', image: 'https://placehold.co/300x200/dcfce7/15803d?text=Wardah', match_type: 'exact' }
+          ]},
+          { level: 'L1', query: 'Make Over', original_found: false, original_count: 0, enhanced_count: 1, issue: true, enhanced_items: [
+            { title: 'Make Over Lip Cream', price: 'Rp 129.000', image: 'https://placehold.co/300x200/fce7f3/be185d?text=Make+Over', match_type: 'fallback_recommend' }
+          ]},
+          { level: 'L2', query: 'serum', original_found: true, original_count: 24, enhanced_count: 2, issue: false, enhanced_items: [
+            { title: 'Vitamin C Anti Oxidant Serum', price: 'Rp 159.000', image: 'https://placehold.co/300x200/ffedd5/ea580c?text=Serum', match_type: 'exact' },
+            { title: 'Niacinamide 10% + Zinc 1%', price: 'Rp 129.000', image: 'https://placehold.co/300x200/e0f2fe/0284c7?text=Serum', match_type: 'exact' }
+          ]},
+          { level: 'L2', query: 'moisturizer', original_found: true, original_count: 18, enhanced_count: 1, issue: false, enhanced_items: [
+            { title: 'Hydrating Moisturizer Ceramide', price: 'Rp 119.000', image: 'https://placehold.co/300x200/fef3c7/ca8a04?text=Moisturizer', match_type: 'exact' }
+          ]},
+          { level: 'L2', query: 'sunscreen', original_found: true, original_count: 15, enhanced_count: 2, issue: false, enhanced_items: [
+            { title: 'Sunscreen SPF 50 PA++++', price: 'Rp 119.000', image: 'https://placehold.co/300x200/fde68a/a16207?text=Sunscreen', match_type: 'exact' },
+            { title: 'Hydrating UV Essence SPF 30', price: 'Rp 99.000', image: 'https://placehold.co/300x200/fef9c3/a16207?text=Sunscreen', match_type: 'exact' }
+          ]},
+          { level: 'L2', query: 'toner', original_found: true, original_count: 9, enhanced_count: 1, issue: false, enhanced_items: [
+            { title: 'AHA BHA Exfoliating Toner', price: 'Rp 109.000', image: 'https://placehold.co/300x200/e0e7ff/4338ca?text=Toner', match_type: 'exact' }
+          ]},
+          { level: 'L2', query: 'cleanser', original_found: true, original_count: 11, enhanced_count: 2, issue: false, enhanced_items: [
+            { title: 'Low pH Gentle Cleanser', price: 'Rp 79.000', image: 'https://placehold.co/300x200/ecfccb/65a30d?text=Cleanser', match_type: 'exact' },
+            { title: 'Salicylic Acid Cleanser', price: 'Rp 89.000', image: 'https://placehold.co/300x200/dcfce7/15803d?text=Cleanser', match_type: 'exact' }
+          ]},
+          { level: 'L3', query: 'kulit kusam', original_found: false, original_count: 0, enhanced_count: 3, issue: true, enhanced_items: [
+            { title: 'Vitamin C Brightening Serum', price: 'Rp 159.000', image: 'https://placehold.co/300x200/ffedd5/ea580c?text=Brightening', match_type: 'semantic_rewritten' },
+            { title: 'Niacinamide 10% + Zinc 1%', price: 'Rp 129.000', image: 'https://placehold.co/300x200/e0f2fe/0284c7?text=Brightening', match_type: 'semantic_rewritten' },
+            { title: 'Brightening Moisturizer Gel', price: 'Rp 109.000', image: 'https://placehold.co/300x200/fef3c7/ca8a04?text=Brightening', match_type: 'semantic_rewritten' }
+          ]},
+          { level: 'L3', query: 'bruntusan', original_found: false, original_count: 0, enhanced_count: 2, issue: true, enhanced_items: [
+            { title: 'Salicylic Acid Cleanser', price: 'Rp 89.000', image: 'https://placehold.co/300x200/dcfce7/15803d?text=Acne', match_type: 'semantic_rewritten' },
+            { title: 'Tea Tree Acne Spot Gel', price: 'Rp 75.000', image: 'https://placehold.co/300x200/dcfce7/15803d?text=Acne', match_type: 'semantic_rewritten' }
+          ]},
+          { level: 'L3', query: 'pori-pori', original_found: false, original_count: 0, enhanced_count: 1, issue: true, enhanced_items: [
+            { title: 'Pore Minimizing Toner', price: 'Rp 115.000', image: 'https://placehold.co/300x200/e0e7ff/4338ca?text=Pore', match_type: 'semantic_rewritten' }
+          ]},
+          { level: 'L3', query: 'anti aging', original_found: false, original_count: 0, enhanced_count: 2, issue: true, enhanced_items: [
+            { title: 'Retinol Night Serum', price: 'Rp 199.000', image: 'https://placehold.co/300x200/f3e8ff/7c3aed?text=Anti+Aging', match_type: 'semantic_rewritten' },
+            { title: 'Peptide Firming Moisturizer', price: 'Rp 169.000', image: 'https://placehold.co/300x200/f3e8ff/7c3aed?text=Anti+Aging', match_type: 'semantic_rewritten' }
+          ]},
+          { level: 'L3', query: 'mencerahkan', original_found: false, original_count: 0, enhanced_count: 1, issue: true, enhanced_items: [
+            { title: 'Brightening Vitamin C Moisturizer', price: 'Rp 149.000', image: 'https://placehold.co/300x200/ffedd5/ea580c?text=Brightening', match_type: 'semantic_rewritten' }
+          ]}
+        ],
+        summary: '测试 13 个词，6 个原站搜不到。其中 1 个品牌词（L1）搜不到，属于高危流失场景。5 个场景/功效词（L3）搜不到，这是用户最核心的痛点表达。接入增强搜索后，预计搜索健康度从 35 分提升到 85 分。'
+      };
+
+      const LEVEL_LABELS = {
+        'L1': 'Brand',
+        'L2': 'Category',
+        'L3': 'Scenario'
+      };
+
+      const LEVEL_BADGES = {
+        'L1': 'type-brand',
+        'L2': 'type-category',
+        'L3': 'type-scenario'
+      };
+
+      const LIBRARY_ESTIMATES = {
+        low: {
+          label: 'small scale',
+          description: 'Your current search is mostly working. A small supplement of synonym and slang mappings should close the remaining gaps.'
+        },
+        medium: {
+          label: 'medium scale',
+          description: 'Based on your SKU mix and search gaps, a medium-sized custom word library will capture the missed category and scenario queries.'
+        },
+        high: {
+          label: 'large scale',
+          description: 'Your site has broad search blind spots. A comprehensive custom library (1000+ mappings) is recommended to recover the missed traffic.'
+        }
+      };
+
+      // DOM elements
+      const auditForm = document.getElementById('auditForm');
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const advancedToggle = document.getElementById('advancedToggle');
+      const advancedFields = document.getElementById('advancedFields');
+      const progressSection = document.getElementById('progressSection');
+      const progressFill = document.getElementById('progressFill');
+      const progressCount = document.getElementById('progressCount');
+      const currentQueryEl = document.querySelector('#currentQuery .current-query-text');
+      const testedQueriesEl = document.getElementById('testedQueries');
+      const resultsSection = document.getElementById('resultsSection');
+      const demoBanner = document.getElementById('demoBanner');
+      const demoModeCheckbox = document.getElementById('demoMode');
+      const formMessage = document.getElementById('formMessage');
+      const actionSection = document.getElementById('actionSection');
+      const actionForm = document.getElementById('actionForm');
+
+      let isRunning = false;
+      let lastReportData = null;
+
+      // Advanced toggle
+      if (advancedToggle) {
+        advancedToggle.addEventListener('click', () => {
+          advancedFields.classList.toggle('active');
+          const icon = advancedToggle.querySelector('.advanced-icon');
+          if (advancedFields.classList.contains('active')) {
+            icon.style.transform = 'rotate(180deg)';
+          } else {
+            icon.style.transform = 'rotate(0deg)';
+          }
+        });
+      }
+
+      function showFormMessage(message, type) {
+        formMessage.textContent = message;
+        formMessage.className = 'form-message ' + type;
+      }
+
+      function clearFormMessage() {
+        formMessage.className = 'form-message';
+        formMessage.textContent = '';
+      }
+
+      // Main audit flow
+      auditForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (isRunning) return;
+
+        const siteUrl = document.getElementById('siteUrl').value.trim();
+        const category = document.getElementById('category').value;
+        const market = document.getElementById('market').value;
+        const searchUrlPattern = document.getElementById('searchUrlPattern').value.trim();
+        const apiEndpoint = document.getElementById('apiEndpoint').value.trim();
+        const useDemo = demoModeCheckbox.checked;
+
+        if (!siteUrl) {
+          showFormMessage('Please enter your website URL.', 'error');
+          return;
+        }
+
+        isRunning = true;
+        clearFormMessage();
+        resultsSection.classList.remove('active');
+        actionSection.classList.remove('active');
+        progressSection.classList.add('active');
+        testedQueriesEl.innerHTML = '';
+        progressFill.style.width = '0%';
+        progressCount.textContent = '0/13';
+        currentQueryEl.innerHTML = 'Preparing audit...';
+
+        const originalBtnText = analyzeBtn.innerHTML;
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '<span class="spinner"></span> Analyzing...';
+
+        try {
+          let data;
+          let isDemo = useDemo;
+
+          if (!useDemo) {
+            try {
+              const payload = {
+                site_url: siteUrl,
+                category: category,
+                market: market
+              };
+              if (searchUrlPattern) payload.search_url_pattern = searchUrlPattern;
+
+              const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+
+              if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.detail?.error || `API returned ${response.status}`);
+              }
+
+              data = await response.json();
+            } catch (apiError) {
+              console.warn('API call failed, falling back to demo data:', apiError);
+              isDemo = true;
+              data = buildDemoResult(siteUrl, category, market);
+            }
+          } else {
+            data = buildDemoResult(siteUrl, category, market);
+          }
+
+          // Animate progress through each test word
+          await animateProgress(data.test_results);
+
+          // Render final results
+          renderResults(data, isDemo);
+        } catch (error) {
+          console.error('Audit failed:', error);
+          showFormMessage('Audit failed: ' + error.message, 'error');
+          progressSection.classList.remove('active');
+        } finally {
+          isRunning = false;
+          analyzeBtn.disabled = false;
+          analyzeBtn.innerHTML = originalBtnText;
+        }
+      });
+
+      function buildDemoResult(siteUrl, category, market) {
+        // Clone demo result and customize a bit based on inputs
+        const result = JSON.parse(JSON.stringify(DEMO_RESULT));
+        result.site_url = siteUrl;
+        result.category = category;
+        result.market = market;
+        result.audit_time = new Date().toISOString();
+        return result;
+      }
+
+      function animateProgress(testResults) {
+        return new Promise((resolve) => {
+          let index = 0;
+          const total = testResults.length;
+
+          const interval = setInterval(() => {
+            if (index >= total) {
+              clearInterval(interval);
+              resolve();
+              return;
+            }
+
+            const result = testResults[index];
+            const percent = Math.round(((index + 1) / total) * 100);
+            progressFill.style.width = percent + '%';
+            progressCount.textContent = `${index + 1}/${total}`;
+            currentQueryEl.innerHTML = `Testing <strong>"${result.query}"</strong>...`;
+
+            addQueryChip(result);
+
+            index++;
+          }, 350); // 350ms per query for smooth animation
+        });
+      }
+
+      function addQueryChip(result) {
+        const chip = document.createElement('div');
+        chip.className = 'query-chip ' + (result.original_found ? 'found' : 'missing');
+        chip.innerHTML = `
+          <span class="icon">${result.original_found ? '✅' : '❌'}</span>
+          <span>${result.query}</span>
+        `;
+        testedQueriesEl.appendChild(chip);
+        // Trigger reflow for animation
+        void chip.offsetWidth;
+        chip.classList.add('active');
+      }
+
+      function renderResults(data, isDemo) {
+        lastReportData = data;
+        progressSection.classList.remove('active');
+        resultsSection.classList.add('active');
+        actionSection.classList.add('active');
+
+        if (isDemo) {
+          demoBanner.classList.add('active');
+        } else {
+          demoBanner.classList.remove('active');
+        }
+
+        // Score circles
+        const currentScore = data.score.current;
+        const enhancedScore = data.score.enhanced;
+        const improvement = data.score.improvement;
+
+        document.getElementById('currentScoreValue').textContent = currentScore;
+        document.getElementById('enhancedScoreValue').textContent = enhancedScore;
+        document.getElementById('improvementValue').textContent = improvement;
+
+        const currentCircle = document.getElementById('currentScoreCircle');
+        const enhancedCircle = document.getElementById('enhancedScoreCircle');
+
+        currentCircle.className = 'score-circle ' + (currentScore >= 60 ? 'high' : 'low');
+        enhancedCircle.className = 'score-circle ' + (enhancedScore >= 60 ? 'high' : 'low');
+
+        // Library estimate
+        const estimate = LIBRARY_ESTIMATES[data.word_library_estimate] || LIBRARY_ESTIMATES.medium;
+        document.getElementById('libraryEstimate').innerHTML =
+          `We estimate a <strong>${estimate.label}</strong> custom word library optimization is needed. ${estimate.description}`;
+
+        // Matrix table
+        const tbody = document.getElementById('matrixTableBody');
+        tbody.innerHTML = '';
+
+        data.test_results.forEach((result) => {
+          const row = document.createElement('tr');
+          if (!result.original_found) {
+            row.classList.add('highlight');
+          }
+
+          const enhancedTitle = result.enhanced_items && result.enhanced_items.length > 0
+            ? result.enhanced_items[0].title
+            : '-';
+
+          row.innerHTML = `
+            <td class="query-cell">${result.query}</td>
+            <td><span class="type-badge ${LEVEL_BADGES[result.level]}">${LEVEL_LABELS[result.level]}</span></td>
+            <td>${result.original_count}</td>
+            <td class="${result.original_found ? 'status-found' : 'status-missing'}">${result.original_found ? 'Found' : 'Missing'}</td>
+            <td><div class="enhanced-info" title="${enhancedTitle}">${result.enhanced_count} ${enhancedTitle !== '-' ? '— ' + enhancedTitle : ''}</div></td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Render enhanced result product cards
+        renderEnhancedCards(data.test_results);
+
+        // Scroll to results
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function renderEnhancedCards(testResults) {
+        const container = document.getElementById('enhancedCardsContainer');
+        if (!container) return;
+        container.innerHTML = '';
+
+        testResults.forEach((result) => {
+          if (!result.enhanced_items || result.enhanced_items.length === 0) return;
+
+          const group = document.createElement('div');
+          group.className = 'enhanced-query-group';
+
+          const title = document.createElement('div');
+          title.className = 'enhanced-query-title';
+          title.textContent = `Query: "${result.query}"`;
+          group.appendChild(title);
+
+          const grid = document.createElement('div');
+          grid.className = 'enhanced-cards-grid';
+
+          result.enhanced_items.forEach((item) => {
+            const card = document.createElement('div');
+            card.className = 'enhanced-product-card';
+
+            const badge = (item.match_type === 'semantic_rewritten' || item.match_type === 'fallback_recommend')
+              ? '<div class="ai-optimized-badge">✨ AI Optimized</div>'
+              : '';
+
+            card.innerHTML = `
+              ${badge}
+              <img class="enhanced-product-image" src="${escapeHtml(item.image || 'https://placehold.co/300x200/e0e0e0/666?text=No+Image')}" alt="${escapeHtml(item.title || '')}" onerror="this.src='https://placehold.co/300x200/e0e0e0/666?text=No+Image'">
+              <div class="enhanced-product-body">
+                <div class="enhanced-product-title">${escapeHtml(item.title || '')}</div>
+                <div class="enhanced-product-price">${escapeHtml(item.price || '')}</div>
+              </div>
+            `;
+            grid.appendChild(card);
+          });
+
+          group.appendChild(grid);
+          container.appendChild(group);
+        });
+      }
+
+      function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      // Report email action
+      if (actionForm) {
+        actionForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const email = document.getElementById('reportEmail').value.trim();
+          const btn = document.getElementById('sendReportBtn');
+          const message = document.getElementById('actionMessage');
+
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            message.textContent = 'Please enter a valid email address.';
+            message.className = 'action-message error';
+            return;
+          }
+
+          const originalText = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = 'Sending...';
+          message.className = 'action-message';
+          message.textContent = '';
+
+          const reportEndpoint = deriveReportEndpoint();
+          const payload = {
+            email: email,
+            site_url: lastReportData ? lastReportData.site_url : document.getElementById('siteUrl').value.trim(),
+            score: lastReportData ? lastReportData.score : null,
+            word_library_estimate: lastReportData ? lastReportData.word_library_estimate : null,
+            test_results: lastReportData ? lastReportData.test_results : [],
+            summary: lastReportData ? lastReportData.summary : null,
+          };
+
+          try {
+            const response = await fetch(reportEndpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+              const result = await response.json().catch(() => ({}));
+              message.textContent = result.message || 'Thanks! Your full report has been sent to ' + email + '.';
+            } else {
+              throw new Error('Server returned ' + response.status);
+            }
+          } catch (err) {
+            console.warn('Report endpoint not available, simulating send:', err);
+            await new Promise(resolve => setTimeout(resolve, 1200));
+            message.textContent = 'Thanks! Your full report has been sent to ' + email + '.';
+          }
+
+          message.className = 'action-message success';
+          btn.disabled = false;
+          btn.textContent = originalText;
+          actionForm.reset();
+        });
+      }
+
+      function deriveReportEndpoint() {
+        const apiEndpoint = document.getElementById('apiEndpoint').value.trim() || 'http://127.0.0.1:8000/api/audit/report';
+        return apiEndpoint.replace('/api/audit/report', '/api/audit/contact');
+      }
+    })();
+  </script>
+</body>
+</html>

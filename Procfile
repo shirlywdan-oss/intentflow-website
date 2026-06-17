@@ -1,0 +1,1 @@
+web: serve -l 8000 --single .
