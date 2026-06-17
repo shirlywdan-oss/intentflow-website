@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intentflow Search Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f9fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --primary: #E8734A;
+      --primary-light: #FFF3E0;
+      --radius: 16px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+      max-width: 560px;
+      margin: 0 auto 32px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(232, 115, 74, 0.12);
+    }
+
+    .search-box button {
+      padding: 14px 24px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-box button:hover {
+      background: #d6603f;
+    }
+
+    .search-box button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-bottom: 24px;
+    }
+
+    .hint code {
+      background: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .status {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 24px;
+    }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .results-header h2 {
+      font-size: 1.25rem;
+      margin: 0;
+    }
+
+    .results-count {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #f3f4f6;
+      display: block;
+    }
+
+    .product-body {
+      padding: 16px;
+    }
+
+    .product-brand {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .product-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin: 0 0 8px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-price {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .ai-optimized-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #FFF3E0;
+      color: #E8734A;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+
+    .error {
+      color: #dc2626;
+      text-align: center;
+      padding: 24px;
+      background: #fef2f2;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Intentflow Search Demo</h1>
+      <p>See how AI understands local language, slang, and synonyms.</p>
+    </header>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Try: serum, kulit kusam, bruntusan..." value="serum">
+      <button id="searchBtn" type="button">Search</button>
+    </div>
+
+    <div class="hint">
+      Exact match (e.g. <code>serum</code>) shows no badge.
+      Semantic match (e.g. <code>kulit kusam</code>) shows <span style="color:#E8734A;font-weight:600;">✨ AI Optimized</span>.
+    </div>
+
+    <div id="resultsArea">
+      <div class="status">Enter a query and click Search.</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const API_ENDPOINT = 'http://127.0.0.1:8000/api/search';
+      const searchInput = document.getElementById('searchInput');
+      const searchBtn = document.getElementById('searchBtn');
+      const resultsArea = document.getElementById('resultsArea');
+
+      function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatPrice(price) {
+        if (typeof price === 'number') return 'Rp ' + price.toLocaleString('id-ID');
+        if (typeof price === 'string' && price) return price;
+        return '';
+      }
+
+      function renderBadge(matchType) {
+        if (matchType === 'semantic_rewritten' || matchType === 'fallback_recommend') {
+          return '<div class="ai-optimized-badge">✨ AI Optimized</div>';
+        }
+        return '';
+      }
+
+      function renderResults(results) {
+        if (!results || results.length === 0) {
+          resultsArea.innerHTML = '<div class="status">No results found.</div>';
+          return;
+        }
+
+        const cardsHtml = results.map((item) => {
+          const title = item.title || item.name || '';
+          const price = formatPrice(item.price);
+          const image = item.image || 'https://placehold.co/300x200/e0e0e0/666?text=No+Image';
+          const brand = item.brand || '';
+          const badge = renderBadge(item.match_type);
+
+          return `
+            <div class="product-card">
+              ${badge}
+              <img class="product-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" onerror="this.src='https://placehold.co/300x200/e0e0e0/666?text=No+Image'">
+              <div class="product-body">
+                ${brand ? `<div class="product-brand">${escapeHtml(brand)}</div>` : ''}
+                <div class="product-title">${escapeHtml(title)}</div>
+                <div class="product-price">${escapeHtml(price)}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        resultsArea.innerHTML = `
+          <div class="results-header">
+            <h2>Search Results</h2>
+            <div class="results-count">${results.length} item${results.length === 1 ? '' : 's'}</div>
+          </div>
+          <div class="product-grid">${cardsHtml}</div>
+        `;
+      }
+
+      async function doSearch() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        searchBtn.disabled = true;
+        resultsArea.innerHTML = '<div class="status">Searching...</div>';
+
+        try {
+          const resp = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+          });
+
+          if (!resp.ok) {
+            throw new Error(`HTTP ${resp.status}`);
+          }
+
+          const data = await resp.json();
+          renderResults(data.items || []);
+        } catch (err) {
+          resultsArea.innerHTML = `<div class="error">Search failed. Make sure the API server is running at ${API_ENDPOINT}.</div>`;
+          console.error(err);
+        } finally {
+          searchBtn.disabled = false;
+        }
+      }
+
+      searchBtn.addEventListener('click', doSearch);
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') doSearch();
+      });
+
+      // Auto-search default query on load for demo purposes
+      doSearch();
+    })();
+  </script>
+</body>
+</html>
