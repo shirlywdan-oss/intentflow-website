@@ -332,8 +332,8 @@
           const data = await resp.json();
           renderResults(data.items || []);
         } catch (err) {
-          resultsArea.innerHTML = `<div class="error">Search failed. Make sure the API server is running at ${API_ENDPOINT}.</div>`;
-          console.error(err);
+          resultsArea.innerHTML = '<div class="error">Search failed. Please try again later.</div>';
+          console.error('Search API error:', API_ENDPOINT, err);
         } finally {
           searchBtn.disabled = false;
         }
