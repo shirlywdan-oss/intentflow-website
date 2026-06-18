@@ -786,7 +786,7 @@
               </div>
               <div class="form-group">
                 <label for="apiEndpoint">API Endpoint</label>
-                <input type="url" id="apiEndpoint" name="apiEndpoint" value="http://127.0.0.1:8000/api/audit/report" placeholder="https://your-api.com/api/audit/report">
+                <input type="url" id="apiEndpoint" name="apiEndpoint" value="https://intentflow-engine-production.up.railway.app/api/audit/report" placeholder="https://your-api.com/api/audit/report">
               </div>
             </div>
 
@@ -1384,7 +1384,7 @@
       }
 
       function deriveReportEndpoint() {
-        const apiEndpoint = document.getElementById('apiEndpoint').value.trim() || 'http://127.0.0.1:8000/api/audit/report';
+        const apiEndpoint = document.getElementById('apiEndpoint').value.trim() || 'https://intentflow-engine-production.up.railway.app/api/audit/report';
         return apiEndpoint.replace('/api/audit/report', '/api/audit/contact');
       }
     })();

@@ -29,7 +29,7 @@
 
   // ==================== 默认配置 ====================
   const DEFAULT_CONFIG = {
-    apiEndpoint: 'http://localhost:8000/api/search',
+    apiEndpoint: 'https://intentflow-engine-production.up.railway.app/api/search',
     siteId: 'unknown-site',
     takeoverThreshold: 1,
     noResultsKeywords: [
