@@ -326,7 +326,7 @@
           }
 
           const data = await resp.json();
-          renderResults(data.items || []);
+          renderResults(data.results || []);
         } catch (err) {
           resultsArea.innerHTML = '<div class="error">Search failed. Please try again later.</div>';
           console.error('Search API error:', API_ENDPOINT, err);
