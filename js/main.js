@@ -194,7 +194,7 @@
         }
       } catch (error) {
         console.error('Form submission error:', error);
-        showFormMessage('Something went wrong. Please try again or email us at hello@intentflow.io', 'error');
+        showFormMessage('Something went wrong. Please try again or email us at hello@intentflowapp.com', 'error');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
