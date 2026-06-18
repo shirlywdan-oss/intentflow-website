@@ -129,23 +129,25 @@
   if (auditForm) {
     auditForm.addEventListener('submit', async function (e) {
       e.preventDefault();
+      if (submitBtn.disabled) return;
 
-      const websiteUrl = document.getElementById('websiteUrl').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const formAction = auditForm.getAttribute('action');
+      const siteUrl = document.getElementById('websiteUrl').value.trim();
+      const userEmail = document.getElementById('email').value.trim();
+      const category = document.getElementById('category').value;
+      const market = document.getElementById('market').value;
 
       // Basic validation
-      if (!websiteUrl || !email) {
-        showFormMessage('Please fill in all fields.', 'error');
+      if (!siteUrl || !userEmail) {
+        showFormMessage('Please enter your website URL and email.', 'error');
         return;
       }
 
-      if (!isValidUrl(websiteUrl)) {
+      if (!isValidUrl(siteUrl)) {
         showFormMessage('Please enter a valid website URL.', 'error');
         return;
       }
 
-      if (!isValidEmail(email)) {
+      if (!isValidEmail(userEmail)) {
         showFormMessage('Please enter a valid email address.', 'error');
         return;
       }
@@ -160,41 +162,28 @@
       hideFormMessage();
 
       try {
-        // If Formspree URL is set, submit to it
-        if (formAction && formAction.trim() !== '') {
-          const response = await fetch(formAction, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              websiteUrl,
-              email,
-            }),
-          });
+        const response = await fetch('https://api.intentflowapp.com/api/audit/report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ site_url: siteUrl, user_email: userEmail, category, market }),
+        });
 
-          if (response.ok) {
-            showFormMessage(
-              "Thanks! We've received your request. Your free audit report will arrive within 24 hours.",
-              'success'
-            );
-            auditForm.reset();
-          } else {
-            throw new Error('Form submission failed');
-          }
-        } else {
-          // No Formspree URL yet — simulate submission
-          await simulateAsyncOperation(1200);
-          showFormMessage(
-            "Thanks! Your request has been recorded. (Formspree action not configured yet — connect your endpoint to start receiving submissions.)",
-            'success'
-          );
+        if (response.ok) {
+          showFormMessage('Thanks! Your audit report is being generated.', 'success');
           auditForm.reset();
+        } else {
+          let detail = 'Server error';
+          try {
+            const data = await response.json();
+            detail = data.detail || data.message || response.statusText;
+          } catch (_) {
+            detail = response.statusText || 'Server error';
+          }
+          showFormMessage('Sorry, something went wrong: ' + detail, 'error');
         }
       } catch (error) {
         console.error('Form submission error:', error);
-        showFormMessage('Something went wrong. Please try again or email us at hello@intentflowapp.com', 'error');
+        showFormMessage('Unable to connect. Please check your network and try again.', 'error');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
@@ -225,10 +214,6 @@
 
   function isValidEmail(string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(string);
-  }
-
-  function simulateAsyncOperation(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   // ========================================
