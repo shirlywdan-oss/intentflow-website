@@ -330,7 +330,7 @@
           <p class="section-subtitle">We'll analyze your site and send you a detailed report.</p>
         </div>
 
-        <form id="auditForm" class="audit-form" action="" method="POST">
+        <form id="auditForm" class="audit-form">
           <div class="form-row">
             <div class="form-group">
               <label for="websiteUrl">Your Website URL</label>
@@ -339,6 +339,26 @@
             <div class="form-group">
               <label for="email">Your Email</label>
               <input type="email" id="email" name="email" placeholder="you@company.com" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" name="category" required>
+                <option value="beauty" selected>Beauty</option>
+                <option value="fashion">Fashion</option>
+                <option value="home">Home & Living</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="market">Market</label>
+              <select id="market" name="market" required>
+                <option value="id" selected>Indonesia</option>
+                <option value="th">Thailand</option>
+                <option value="vn">Vietnam</option>
+                <option value="sg">Singapore</option>
+                <option value="my">Malaysia</option>
+              </select>
             </div>
           </div>
           <button type="submit" class="btn btn-primary btn-large form-submit" id="submitBtn">
@@ -404,5 +424,64 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById('auditForm');
+      const message = document.getElementById('formMessage');
+      const submitBtn = document.getElementById('submitBtn');
+      const originalBtnText = submitBtn.innerHTML;
+
+      function showMessage(text, type) {
+        message.textContent = text;
+        message.className = 'form-message ' + type;
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (submitBtn.disabled) return;
+
+        const siteUrl = document.getElementById('websiteUrl').value.trim();
+        const userEmail = document.getElementById('email').value.trim();
+        const category = document.getElementById('category').value;
+        const market = document.getElementById('market').value;
+
+        if (!siteUrl || !userEmail) {
+          showMessage('Please enter your website URL and email.', 'error');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        showMessage('', '');
+
+        try {
+          const response = await fetch('https://api.intentflowapp.com/api/audit/report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ site_url: siteUrl, user_email: userEmail, category, market }),
+          });
+
+          if (response.ok) {
+            showMessage('Thanks! Your audit report is being generated.', 'success');
+            form.reset();
+          } else {
+            let detail = 'Server error';
+            try {
+              const data = await response.json();
+              detail = data.detail || data.message || response.statusText;
+            } catch (_) {
+              detail = response.statusText || 'Server error';
+            }
+            showMessage('Sorry, something went wrong: ' + detail, 'error');
+          }
+        } catch (err) {
+          showMessage('Unable to connect. Please check your network and try again.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

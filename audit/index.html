@@ -776,6 +776,10 @@
             </div>
 
             <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label for="userEmail">Your Email</label>
+                <input type="email" id="userEmail" name="userEmail" placeholder="you@company.com" required>
+              </div>
               <div class="form-group">
                 <label for="market">Language / Market</label>
                 <select id="market" name="market" required>
@@ -1082,6 +1086,8 @@
         formMessage.textContent = '';
       }
 
+      const AUDIT_API = 'https://api.intentflowapp.com/api/audit/report';
+
       // Main audit flow
       auditForm.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -1090,12 +1096,12 @@
         const siteUrl = document.getElementById('siteUrl').value.trim();
         const category = document.getElementById('category').value;
         const market = document.getElementById('market').value;
+        const userEmail = document.getElementById('userEmail').value.trim();
         const searchUrlPattern = document.getElementById('searchUrlPattern').value.trim();
-        const apiEndpoint = document.getElementById('apiEndpoint').value.trim();
         const useDemo = demoModeCheckbox.checked;
 
-        if (!siteUrl) {
-          showFormMessage('Please enter your website URL.', 'error');
+        if (!siteUrl || !userEmail) {
+          showFormMessage('Please enter your website URL and email.', 'error');
           return;
         }
 
@@ -1103,58 +1109,54 @@
         clearFormMessage();
         resultsSection.classList.remove('active');
         actionSection.classList.remove('active');
-        progressSection.classList.add('active');
-        testedQueriesEl.innerHTML = '';
-        progressFill.style.width = '0%';
-        progressCount.textContent = '0/13';
-        currentQueryEl.innerHTML = 'Preparing audit...';
 
         const originalBtnText = analyzeBtn.innerHTML;
         analyzeBtn.disabled = true;
         analyzeBtn.innerHTML = '<span class="spinner"></span> Analyzing...';
 
         try {
-          let data;
-          let isDemo = useDemo;
-
-          if (!useDemo) {
-            try {
-              const payload = {
-                site_url: siteUrl,
-                category: category,
-                market: market
-              };
-              if (searchUrlPattern) payload.search_url_pattern = searchUrlPattern;
-
-              const response = await fetch(apiEndpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-              });
-
-              if (!response.ok) {
-                const err = await response.json().catch(() => ({}));
-                throw new Error(err.detail?.error || `API returned ${response.status}`);
-              }
-
-              data = await response.json();
-            } catch (apiError) {
-              console.warn('API call failed, falling back to demo data:', apiError);
-              isDemo = true;
-              data = buildDemoResult(siteUrl, category, market);
-            }
-          } else {
-            data = buildDemoResult(siteUrl, category, market);
+          if (useDemo) {
+            progressSection.classList.add('active');
+            testedQueriesEl.innerHTML = '';
+            progressFill.style.width = '0%';
+            progressCount.textContent = '0/13';
+            currentQueryEl.innerHTML = 'Preparing audit...';
+            const data = buildDemoResult(siteUrl, category, market);
+            await animateProgress(data.test_results);
+            renderResults(data, true);
+            return;
           }
 
-          // Animate progress through each test word
-          await animateProgress(data.test_results);
+          const payload = {
+            site_url: siteUrl,
+            user_email: userEmail,
+            category: category,
+            market: market
+          };
+          if (searchUrlPattern) payload.search_url_pattern = searchUrlPattern;
 
-          // Render final results
-          renderResults(data, isDemo);
+          const response = await fetch(AUDIT_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (response.ok) {
+            showFormMessage('Thanks! Your audit report is being generated.', 'success');
+            auditForm.reset();
+          } else {
+            let detail = 'Server error';
+            try {
+              const data = await response.json();
+              detail = data.detail || data.message || response.statusText;
+            } catch (_) {
+              detail = response.statusText || 'Server error';
+            }
+            showFormMessage('Sorry, something went wrong: ' + detail, 'error');
+          }
         } catch (error) {
           console.error('Audit failed:', error);
-          showFormMessage('Audit failed: ' + error.message, 'error');
+          showFormMessage('Unable to connect. Please check your network and try again.', 'error');
           progressSection.classList.remove('active');
         } finally {
           isRunning = false;
