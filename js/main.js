@@ -131,8 +131,8 @@
       e.preventDefault();
       if (submitBtn.disabled) return;
 
-      const siteUrl = document.getElementById('websiteUrl').value.trim();
-      const userEmail = document.getElementById('email').value.trim();
+      const siteUrl = document.getElementById('siteUrl').value.trim();
+      const userEmail = document.getElementById('userEmail').value.trim();
       const category = document.getElementById('category').value;
       const market = document.getElementById('market').value;
 

@@ -332,16 +332,10 @@
 
         <form id="auditForm" class="audit-form">
           <div class="form-row">
-            <div class="form-group">
-              <label for="websiteUrl">Your Website URL</label>
-              <input type="url" id="websiteUrl" name="websiteUrl" placeholder="https://yourbrand.com" required>
+            <div class="form-group" style="flex: 2;">
+              <label for="siteUrl">Your Website URL</label>
+              <input type="url" id="siteUrl" name="siteUrl" placeholder="https://yourbrand.com" required>
             </div>
-            <div class="form-group">
-              <label for="email">Your Email</label>
-              <input type="email" id="email" name="email" placeholder="you@company.com" required>
-            </div>
-          </div>
-          <div class="form-row">
             <div class="form-group">
               <label for="category">Category</label>
               <select id="category" name="category" required>
@@ -350,8 +344,14 @@
                 <option value="home">Home & Living</option>
               </select>
             </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 2;">
+              <label for="userEmail">Your Email</label>
+              <input type="email" id="userEmail" name="userEmail" placeholder="you@company.com" required>
+            </div>
             <div class="form-group">
-              <label for="market">Market</label>
+              <label for="market">Language / Market</label>
               <select id="market" name="market" required>
                 <option value="id" selected>Indonesia</option>
                 <option value="th">Thailand</option>
