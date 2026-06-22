@@ -126,7 +126,8 @@
   // ========================================
   // Audit form handling
   // ========================================
-  if (auditForm) {
+  // 只在主页等没有独立审计脚本（无 analyzeBtn）的页面挂载通用审计表单处理
+  if (auditForm && !document.getElementById('analyzeBtn')) {
     auditForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (submitBtn.disabled) return;
