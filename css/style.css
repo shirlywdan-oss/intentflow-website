@@ -264,6 +264,12 @@ section {
   font-weight: 700;
 }
 
+.logo-img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
 .nav-links {
   display: none;
   align-items: center;
@@ -989,6 +995,13 @@ section {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.9375rem;
   max-width: 300px;
+}
+
+.footer-logo {
+  display: block;
+  margin: 0 auto 1rem;
+  height: 40px;
+  width: auto;
 }
 
 .footer-title {
