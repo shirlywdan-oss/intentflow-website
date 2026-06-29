@@ -58,8 +58,9 @@
     .search-box {
       display: flex;
       gap: 12px;
-      max-width: 560px;
+      max-width: 720px;
       margin: 0 auto 32px;
+      align-items: stretch;
     }
 
     .search-box input {
@@ -70,9 +71,27 @@
       font-size: 1rem;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
+      min-width: 0;
     }
 
     .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(232, 115, 74, 0.12);
+    }
+
+    .search-box select {
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      background: #fff;
+      cursor: pointer;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-box select:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(232, 115, 74, 0.12);
     }
@@ -87,6 +106,7 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
+      white-space: nowrap;
     }
 
     .search-box button:hover {
@@ -96,6 +116,46 @@
     .search-box button:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+
+    @media (max-width: 640px) {
+      .search-box {
+        flex-wrap: wrap;
+      }
+      .search-box input, .search-box select, .search-box button {
+        width: 100%;
+      }
+    }
+
+    .category-selector {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .category-selector label {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .category-selector select {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9375rem;
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+      min-width: 160px;
+    }
+
+    .category-selector select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(232, 115, 74, 0.12);
     }
 
     .hint {
@@ -232,10 +292,14 @@
 
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Try: serum, kulit kusam, bruntusan..." value="serum">
+      <select id="categorySelect" aria-label="Category">
+        <option value="beauty" selected>Beauty</option>
+        <option value="pet">Pet Care</option>
+      </select>
       <button id="searchBtn" type="button">Search</button>
     </div>
 
-    <div class="hint">
+    <div class="hint" id="hintBox">
       Exact match (e.g. <code>serum</code>) shows no badge.
       Semantic match (e.g. <code>kulit kusam</code>) shows <span style="color:#E8734A;font-weight:600;">✨ AI Optimized</span>.
     </div>
@@ -252,7 +316,32 @@
       const API_ENDPOINT = 'https://intentflow-engine-production.up.railway.app/api/search';
       const searchInput = document.getElementById('searchInput');
       const searchBtn = document.getElementById('searchBtn');
+      const categorySelect = document.getElementById('categorySelect');
       const resultsArea = document.getElementById('resultsArea');
+      const hintBox = document.getElementById('hintBox');
+
+      const PLACEHOLDERS = {
+        beauty: 'Try: serum, kulit kusam, bruntusan...',
+        pet: 'Try: makanan kucing, kucing mencret, vitamin anjing...'
+      };
+
+      function updatePlaceholder() {
+        const cat = categorySelect ? categorySelect.value : 'beauty';
+        searchInput.placeholder = PLACEHOLDERS[cat] || PLACEHOLDERS.beauty;
+        if (!hintBox) return;
+        if (cat === 'pet') {
+          hintBox.innerHTML = 'Exact match (e.g. <code>makanan kucing</code>) shows no badge. Semantic match (e.g. <code>kucing mencret</code>) shows <span style="color:#E8734A;font-weight:600;">✨ AI Optimized</span>.';
+        } else {
+          hintBox.innerHTML = 'Exact match (e.g. <code>serum</code>) shows no badge. Semantic match (e.g. <code>kulit kusam</code>) shows <span style="color:#E8734A;font-weight:600;">✨ AI Optimized</span>.';
+        }
+      }
+
+      if (categorySelect) {
+        categorySelect.addEventListener('change', function () {
+          updatePlaceholder();
+          doSearch();
+        });
+      }
 
       function escapeHtml(str) {
         if (str == null) return '';
@@ -320,7 +409,8 @@
         resultsArea.innerHTML = '<div class="status">Searching...</div>';
 
         try {
-          const resp = await fetch(`${API_ENDPOINT}?q=${encodeURIComponent(query)}`);
+          const category = categorySelect ? categorySelect.value : 'beauty';
+          const resp = await fetch(`${API_ENDPOINT}?q=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`);
 
           if (!resp.ok) {
             throw new Error(`HTTP ${resp.status}`);
@@ -341,7 +431,8 @@
         if (e.key === 'Enter') doSearch();
       });
 
-      // Auto-search default query on load for demo purposes
+      // 初始化提示文案并自动搜索默认词
+      updatePlaceholder();
       doSearch();
     })();
   </script>
