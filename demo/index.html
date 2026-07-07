@@ -40,17 +40,58 @@
     }
 
     header {
-      text-align: center;
       margin-bottom: 40px;
     }
 
+    .demo-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .demo-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--text);
+    }
+
+    .demo-logo img {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    .demo-nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    .demo-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .demo-nav a:hover {
+      color: var(--primary);
+    }
+
     header h1 {
+      text-align: center;
       font-size: 2rem;
       font-weight: 700;
       margin: 0 0 8px;
     }
 
     header p {
+      text-align: center;
       color: var(--text-muted);
       margin: 0;
     }
@@ -280,12 +321,29 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 14px;
       }
+
+      .demo-header-top {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
+      <div class="demo-header-top">
+        <a href="/" class="demo-logo">
+          <img src="/logo.png" alt="Intentflow">
+          Intentflow
+        </a>
+        <nav class="demo-nav">
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="/audit/">Audit</a>
+        </nav>
+      </div>
       <h1>Intentflow Search Demo</h1>
       <p>See how AI understands local language, slang, and synonyms.</p>
     </header>

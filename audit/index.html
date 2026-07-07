@@ -44,6 +44,12 @@
       color: var(--primary);
     }
 
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
     .audit-page {
       padding-top: 0;
       min-height: auto;
@@ -730,13 +736,16 @@
         <img src="/logo.png" alt="Intentflow" class="logo-img">
         Intent<span>flow</span>
       </a>
-      <a href="../index.html" class="back-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 12H5"/>
-          <path d="M12 19l-7-7 7-7"/>
-        </svg>
-        Back to Home
-      </a>
+      <nav class="header-nav">
+        <a href="../index.html" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5"/>
+            <path d="M12 19l-7-7 7-7"/>
+          </svg>
+          Home
+        </a>
+        <a href="../blog/" class="back-link">Blog</a>
+      </nav>
     </div>
   </header>
 

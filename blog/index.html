@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Intentflow Blog — Search strategy, AI agents, and building in public.">
+  <title>Intentflow Blog</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #E8734A;
+      --primary-dark: #D6603F;
+      --bg: #f8f9fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 16px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text);
+    }
+
+    .logo img {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .main-nav a {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .main-nav a:hover {
+      color: var(--primary);
+    }
+
+    /* Hero */
+    .blog-hero {
+      padding: 80px 20px 48px;
+      text-align: center;
+      background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+    }
+
+    .blog-hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .blog-hero p {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Posts */
+    .posts-section {
+      padding: 32px 20px 80px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .post-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .post-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-date {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .post-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      margin: 0 0 12px;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    .post-card:hover .post-title {
+      color: var(--primary);
+    }
+
+    .post-excerpt {
+      color: var(--text-muted);
+      margin: 0 0 16px;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .post-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: #FFF3E0;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .status {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 48px 20px;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      background: var(--card);
+    }
+
+    @media (max-width: 640px) {
+      .blog-hero h1 {
+        font-size: 2rem;
+      }
+
+      .post-card {
+        padding: 20px;
+      }
+
+      .main-nav {
+        gap: 16px;
+      }
+
+      .main-nav a {
+        font-size: 0.875rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <img src="/logo.png" alt="Intentflow">
+        Intent<span>flow</span>
+      </a>
+      <nav class="main-nav">
+        <a href="/">Home</a>
+        <a href="/audit/">Audit</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="blog-hero">
+    <h1>Intentflow Blog</h1>
+    <p>Search strategy, AI agents, and building in public</p>
+  </section>
+
+  <section class="posts-section">
+    <div id="postsContainer">
+      <div class="status">Loading posts...</div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>© 2024 Intentflow. Built for Southeast Asian beauty and pet care brands.</p>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const container = document.getElementById('postsContainer');
+
+      function formatDate(dateStr) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateStr).toLocaleDateString('en-US', options);
+      }
+
+      function renderPosts(posts) {
+        if (!posts || posts.length === 0) {
+          container.innerHTML = '<div class="status">No posts yet.</div>';
+          return;
+        }
+
+        // Sort by date descending
+        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const html = posts.map(post => {
+          const tagsHtml = (post.tags || []).map(tag => `<span class="post-tag">${escapeHtml(tag)}</span>`).join('');
+          return `
+            <article class="post-card">
+              <a href="/blog/post.html?slug=${encodeURIComponent(post.slug)}">
+                <div class="post-date">${formatDate(post.date)}</div>
+                <h2 class="post-title">${escapeHtml(post.title)}</h2>
+                <p class="post-excerpt">${escapeHtml(post.excerpt)}</p>
+                <div class="post-tags">${tagsHtml}</div>
+              </a>
+            </article>
+          `;
+        }).join('');
+
+        container.innerHTML = `<div class="post-list">${html}</div>`;
+      }
+
+      function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      async function loadPosts() {
+        try {
+          const resp = await fetch('/blog/posts/posts.json');
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const posts = await resp.json();
+          renderPosts(posts);
+        } catch (err) {
+          console.error('Failed to load posts:', err);
+          container.innerHTML = '<div class="status">Failed to load posts. Please try again later.</div>';
+        }
+      }
+
+      loadPosts();
+    })();
+  </script>
+</body>
+</html>

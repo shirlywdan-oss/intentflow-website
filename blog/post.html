@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intentflow Blog</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #E8734A;
+      --primary-dark: #D6603F;
+      --bg: #f8f9fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --radius: 16px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text);
+    }
+
+    .logo img {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .main-nav a {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .main-nav a:hover {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    /* Article */
+    .article-header {
+      padding: 48px 20px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .article-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 auto 16px;
+      max-width: 720px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .article-meta {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+      margin-bottom: 12px;
+    }
+
+    .article-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .article-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: #FFF3E0;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .article-body {
+      padding: 32px 20px 80px;
+      background: var(--card);
+    }
+
+    .article-content {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .article-content h1,
+    .article-content h2,
+    .article-content h3,
+    .article-content h4 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .article-content h1 {
+      font-size: 2rem;
+    }
+
+    .article-content h2 {
+      font-size: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    .article-content h3 {
+      font-size: 1.25rem;
+    }
+
+    .article-content p {
+      margin-bottom: 1.25rem;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+    }
+
+    .article-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .article-content strong {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .article-content blockquote {
+      margin: 1.5rem 0;
+      padding: 0.75rem 1.25rem;
+      border-left: 4px solid var(--primary);
+      background: var(--bg);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .article-content blockquote p:last-child {
+      margin-bottom: 0;
+    }
+
+    .article-content code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.875em;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--primary-dark);
+    }
+
+    .article-content pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+    }
+
+    .article-content pre code {
+      background: transparent;
+      padding: 0;
+      color: var(--text);
+    }
+
+    .article-content hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .article-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+
+    .status {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 80px 20px;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      background: var(--card);
+    }
+
+    @media (max-width: 640px) {
+      .article-title {
+        font-size: 1.5rem;
+      }
+
+      .main-nav {
+        gap: 16px;
+      }
+
+      .main-nav a {
+        font-size: 0.875rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <img src="/logo.png" alt="Intentflow">
+        Intent<span>flow</span>
+      </a>
+      <nav class="main-nav">
+        <a href="/">Home</a>
+        <a href="/audit/">Audit</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+    </div>
+  </header>
+
+  <header class="article-header">
+    <a href="/blog/" class="back-link">← Back to Blog</a>
+    <h1 id="articleTitle" class="article-title">Loading...</h1>
+    <div id="articleMeta" class="article-meta"></div>
+    <div id="articleTags" class="article-tags"></div>
+  </header>
+
+  <article class="article-body">
+    <div id="articleContent" class="article-content">
+      <div class="status">Loading article...</div>
+    </div>
+  </article>
+
+  <footer class="site-footer">
+    <p>© 2024 Intentflow. Built for Southeast Asian beauty and pet care brands.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const titleEl = document.getElementById('articleTitle');
+      const metaEl = document.getElementById('articleMeta');
+      const tagsEl = document.getElementById('articleTags');
+      const contentEl = document.getElementById('articleContent');
+
+      function getSlug() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('slug');
+      }
+
+      function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatDate(dateStr) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateStr).toLocaleDateString('en-US', options);
+      }
+
+      function renderError(message) {
+        contentEl.innerHTML = `<div class="status">${escapeHtml(message)}</div>`;
+        titleEl.textContent = 'Article Not Found';
+        document.title = 'Article Not Found | Intentflow Blog';
+      }
+
+      async function loadArticle() {
+        const slug = getSlug();
+        if (!slug) {
+          renderError('No article slug provided.');
+          return;
+        }
+
+        try {
+          const [postsResp, mdResp] = await Promise.all([
+            fetch('/blog/posts/posts.json'),
+            fetch(`/blog/posts/${encodeURIComponent(slug)}.md`)
+          ]);
+
+          if (!postsResp.ok) throw new Error('Failed to load post index');
+          if (!mdResp.ok) throw new Error('Article not found');
+
+          const posts = await postsResp.json();
+          const post = posts.find(p => p.slug === slug);
+
+          if (!post) {
+            renderError('Article not found in index.');
+            return;
+          }
+
+          const md = await mdResp.text();
+          const html = marked.parse(md);
+
+          titleEl.textContent = post.title;
+          document.title = `${post.title} | Intentflow Blog`;
+          metaEl.textContent = `Published on ${formatDate(post.date)}`;
+          tagsEl.innerHTML = (post.tags || [])
+            .map(tag => `<span class="article-tag">${escapeHtml(tag)}</span>`)
+            .join('');
+          contentEl.innerHTML = html;
+        } catch (err) {
+          console.error('Failed to load article:', err);
+          renderError(err.message || 'Failed to load article.');
+        }
+      }
+
+      loadArticle();
+    })();
+  </script>
+</body>
+</html>

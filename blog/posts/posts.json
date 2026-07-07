@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "multi-agent-data-governance",
+    "title": "How I Built a Multi-Agent System to Review 1,000+ Multilingual Keywords Daily",
+    "date": "2026-07-05",
+    "excerpt": "Running a Multi-Agent pipeline in production across thousands of multilingual queries without breaking your API budget.",
+    "tags": ["AI Agents", "Data Engineering", "SaaS"]
+  },
+  {
+    "slug": "from-beauty-to-pet-care",
+    "title": "From Beauty to Pet Care: Scaling a Search Engine Across Verticals in 24 Hours",
+    "date": "2026-06-28",
+    "excerpt": "How I expanded IntentFlow from beauty to pet care without touching a single line of core code.",
+    "tags": ["Product Strategy", "Category Expansion", "SaaS"]
+  }
+]
