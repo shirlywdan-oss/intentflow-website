@@ -1,5 +1,12 @@
 [
   {
+    "slug": "beauty-to-pet-care-24-hours",
+    "title": "From Beauty to Pet Care: Scaling a Search Engine Across Verticals in 24 Hours",
+    "date": "2026-07-09",
+    "excerpt": "How I expanded IntentFlow from beauty to pet care without touching a single line of core code — and why this means the marginal cost of entering a new vertical approaches zero.",
+    "tags": ["Product Strategy", "Category Expansion", "SaaS"]
+  },
+  {
     "slug": "multi-agent-data-governance",
     "title": "How I Built a Multi-Agent System to Review 1,000+ Multilingual Keywords Daily",
     "date": "2026-07-05",
